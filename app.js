@@ -20,8 +20,10 @@ io.on("connection", (socket) => {
         io.emit("message", "A user has left the chat")
     })
 
-    // changes the color for ALL the sockets EXCEPT itself
-    // socket.broadcast.emit("changeBackgroundToThisColor", data);
+    // listen for chat messages
+    socket.on("chatMessage", (msg) => {
+        io.emit("message", msg)
+    })
 });
 
 
