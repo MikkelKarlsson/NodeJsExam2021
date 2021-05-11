@@ -14,6 +14,10 @@ chatForm.addEventListener("submit", (event) => {
     const msg = document.getElementById("msg").value;
 
     socket.emit("chatMessage", msg);
+
+    document.getElementById("msg").value = "";
+    document.getElementById("msg").focus();
+    
 })
 
 // send message to DOM
