@@ -1,0 +1,28 @@
+{
+  "name": "nodejsexam2021",
+  "version": "1.0.0",
+  "description": "Realtime chat app with different rooms",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MikkelKarlsson/NodeJsExam2021.git"
+  },
+  "author": "Peter Melander & Mikkel Karlsson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MikkelKarlsson/NodeJsExam2021/issues"
+  },
+  "homepage": "https://github.com/MikkelKarlsson/NodeJsExam2021#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "moment": "^2.29.1",
+    "socket.io": "^4.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
