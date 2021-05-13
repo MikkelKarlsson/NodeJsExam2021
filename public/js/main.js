@@ -6,7 +6,7 @@ socket.on("message", message => {
     console.log(message);
     outputMessage(message)
 
-    // scroll down
+    // scroll down on every new chat message
     document.getElementById("c-messages").scrollTop = document.getElementById("c-messages").scrollHeight;
 })
 
@@ -18,6 +18,7 @@ chatForm.addEventListener("submit", (event) => {
 
     socket.emit("chatMessage", msg);
 
+    // clear message input field and set focus after each send message
     document.getElementById("msg").value = "";
     document.getElementById("msg").focus();
 

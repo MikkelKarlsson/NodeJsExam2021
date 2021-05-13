@@ -20,7 +20,7 @@ io.on("connection", (socket) => {
         io.emit("message", "A user has left the chat")
     })
 
-    // listen for chat messages
+    // listen for user chat messages
     socket.on("chatMessage", (msg) => {
         io.emit("message", msg)
     })
