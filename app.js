@@ -19,7 +19,7 @@ io.on("connection", (socket) => {
 
 
             // Welcome to a single client
-            socket.emit("message", formatMessage(chatBot, "Welcome to heaven"));
+            socket.emit("message", formatMessage(chatBot, "Welcome to KEA Lounge"));
 
             // To all clients except the connecting user
             socket.broadcast
