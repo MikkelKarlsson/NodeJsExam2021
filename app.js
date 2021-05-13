@@ -1,28 +1,48 @@
 const express = require("express");
 const app = express();
-
 const server = require("http").createServer(app);
-
 const io = require("socket.io")(server);
+const formatMessage = require("./public/js/messages");
+const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require("./public/js/users");
+
+
 
 app.use(express.static('public'));
 
+const chatBot = 'ChatBot'
+
 io.on("connection", (socket) => {
-    console.log("A socket connected with id", socket.id);
+    socket.on("joinRoom", ({ username, room }) => {
+        const user = userJoin(socket.id, username, room);
 
-    // Welcome to a single client
-    socket.emit("message", "Welcome to heaven")
+        socket.join(user.room);
 
-    // To all clients except the connecting user
-    socket.broadcast.emit("message", "A user has joined the chat");
-        
-    socket.on("disconnect", () => {
-        io.emit("message", "A user has left the chat")
-    })
+
+            // Welcome to a single client
+            socket.emit("message", formatMessage(chatBot, "Welcome to heaven"));
+
+            // To all clients except the connecting user
+            socket.broadcast
+                .to(user.room)
+                .emit("message", formatMessage(chatBot, `${user.username}` + " has joined the chat"));
+    });
 
     // listen for user chat messages
     socket.on("chatMessage", (msg) => {
-        io.emit("message", msg)
+
+        const user = getCurrentUser(socket.id);
+
+        io.to(user.room).emit("message", formatMessage(user.username, msg));
+    })
+
+    socket.on("disconnect", () => {
+        const user = userLeave(socket.id);
+
+        if(user) {
+            io.to(user.room).emit(
+                "message", 
+                formatMessage(chatBot, `${user.username}` + " has left the chat"));
+        }
     })
 });
 
