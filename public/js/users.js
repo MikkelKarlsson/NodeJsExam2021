@@ -29,9 +29,19 @@ function getRoomUsers(room) {
     return users.filter(user => user.room === room);
 }
 
+const login = (app, connection) => {
+    app.post("/signUp", (req, res) => {
+        const data = req.body
+        connection.query("INSERT INTO userLogin SET ?", data, (rows, fields) => {
+            console.log(data.username, data.password, data.alias);
+        });
+    }); 
+}
+
 module.exports = {
     userJoin,
     getCurrentUser,
     userLeave,
-    getRoomUsers
+    getRoomUsers,
+    login
 }

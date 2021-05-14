@@ -3,7 +3,7 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const formatMessage = require("./public/js/messages");
-const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require("./public/js/users");
+const { userJoin, getCurrentUser, userLeave, getRoomUsers, login } = require("./public/js/users");
 
 const dotenv = require("dotenv");
 dotenv.config({
@@ -24,9 +24,11 @@ connection.connect((error) => {
     if(!error){
         console.log("Database connection succesful");
     } else {
-        console.log("Could not connectto the database: " + error);
+        console.log("Could not connect to the database: " + error);
     }
 })
+
+login(app, connection);
 
 app.use(express.static('public'));
 
@@ -87,6 +89,12 @@ app.get("/", (req, res) => {
 app.get("/chat", (req, res) => {
     res.sendFile(__dirname + "/public/chat.html");
 })
+
+app.get("/signUp", (req, res) => {
+    res.sendFile(__dirname + "/public/signUp.html");
+})
+
+
 
 server.listen(8080, (error) => {
     if (error) {
