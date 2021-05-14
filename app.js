@@ -2,8 +2,22 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
+const session = require("express-session")
+
+app.use(session({
+    secret: "Key that will sign cookie",
+    resave: false,
+    saveUninitialized: false
+}))
+
 const formatMessage = require("./public/js/messages");
-const { userJoin, getCurrentUser, userLeave, getRoomUsers, login } = require("./public/js/users");
+const {
+    userJoin,
+    getCurrentUser,
+    userLeave,
+    getRoomUsers,
+    login
+} = require("./public/js/users");
 
 const dotenv = require("dotenv");
 dotenv.config({
@@ -21,7 +35,7 @@ const connection = mysql.createConnection({
 })
 
 connection.connect((error) => {
-    if(!error){
+    if (!error) {
         console.log("Database connection succesful");
     } else {
         console.log("Could not connect to the database: " + error);
@@ -36,30 +50,30 @@ app.use(express.urlencoded({
 
 login(app, connection);
 
-
-
 const chatBot = 'ChatBot'
 
 io.on("connection", (socket) => {
-    socket.on("joinRoom", ({ username, room }) => {
+    socket.on("joinRoom", ({
+        username,
+        room
+    }) => {
         const user = userJoin(socket.id, username, room);
 
         socket.join(user.room);
 
+        // Welcome to a single client
+        socket.emit("message", formatMessage(chatBot, "Welcome to KEA Lounge"));
 
-            // Welcome to a single client
-            socket.emit("message", formatMessage(chatBot, "Welcome to KEA Lounge"));
+        // To all clients except the connecting user
+        socket.broadcast
+            .to(user.room)
+            .emit("message", formatMessage(chatBot, `${user.username}` + " has joined the chat"));
 
-            // To all clients except the connecting user
-            socket.broadcast
-                .to(user.room)
-                .emit("message", formatMessage(chatBot, `${user.username}` + " has joined the chat"));
-
-            // Send users and room info
-            io.to(user.room).emit("roomUsers", {
-               room: user.room,
-               users: getRoomUsers(user.room) 
-            });
+        // Send users and room info
+        io.to(user.room).emit("roomUsers", {
+            room: user.room,
+            users: getRoomUsers(user.room)
+        });
     });
 
     // listen for user chat messages
@@ -73,16 +87,16 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
         const user = userLeave(socket.id);
 
-        if(user) {
+        if (user) {
             io.to(user.room).emit(
-                "message", 
+                "message",
                 formatMessage(chatBot, `${user.username}` + " has left the chat"));
 
             // Send users and room info
             io.to(user.room).emit("roomUsers", {
                 room: user.room,
-                users: getRoomUsers(user.room) 
-             });
+                users: getRoomUsers(user.room)
+            });
         }
     })
 });
@@ -93,10 +107,15 @@ app.get("/", (req, res) => {
 })
 
 app.get("/chat", (req, res) => {
-    res.sendFile(__dirname + "/public/chat.html");
+    if(req.session.isAuth){
+        res.sendFile(__dirname + "/public/chat.html");
+    } else {
+        res.sendFile(__dirname + "/public/index.html");
+    }
+    
 })
 
-app.get("/signUp", (req, res) => {
+app.get("/signUp", (req, res) => {    
     res.sendFile(__dirname + "/public/signUp.html");
 })
 

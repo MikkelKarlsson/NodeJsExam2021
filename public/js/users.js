@@ -35,7 +35,22 @@ const login = (app, connection) => {
         connection.query("INSERT INTO userLogin SET ?", data, (rows, fields) => {
             console.log("Created User: " + data.username + " With Alias: " + data.alias);
         });
+        res.redirect("/")
     }); 
+
+    app.post("/", (req, res) => {
+        const data = req.body
+        console.log(data.username + " AND " + data.password);
+        connection.query("SELECT * FROM userLogin where username = ? and password = ?", [data.username, data.password], (fields, rows) => {
+            if(rows.length > 0){
+                req.session.isAuth = true
+                res.redirect("/chat")
+            } else {
+                res.redirect("/")
+            }
+        });
+    }); 
+
 }
 
 module.exports = {
