@@ -33,7 +33,7 @@ const login = (app, connection) => {
     app.post("/signUp", (req, res) => {
         const data = req.body
         connection.query("INSERT INTO userLogin SET ?", data, (rows, fields) => {
-            console.log(data.username, data.password, data.alias);
+            console.log("Created User: " + data.username + " With Alias: " + data.alias);
         });
     }); 
 }

@@ -28,9 +28,15 @@ connection.connect((error) => {
     }
 })
 
+app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
+
 login(app, connection);
 
-app.use(express.static('public'));
+
 
 const chatBot = 'ChatBot'
 
