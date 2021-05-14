@@ -5,7 +5,28 @@ const io = require("socket.io")(server);
 const formatMessage = require("./public/js/messages");
 const { userJoin, getCurrentUser, userLeave, getRoomUsers } = require("./public/js/users");
 
+const dotenv = require("dotenv");
+dotenv.config({
+    path: "./.env"
+})
 
+const mysql = require("mysql");
+const connection = mysql.createConnection({
+    host: "kealoungedb.censevy2cldg.us-east-1.rds.amazonaws.com",
+    port: "3306",
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: "KeaLoungeDB"
+
+})
+
+connection.connect((error) => {
+    if(!error){
+        console.log("Database connection succesful");
+    } else {
+        console.log("Could not connectto the database: " + error);
+    }
+})
 
 app.use(express.static('public'));
 
