@@ -10,7 +10,10 @@ app.use(session({
     saveUninitialized: false
 }))
 
+const sharedsession = require("express-socket.io-session");
+
 const formatMessage = require("./public/js/messages");
+
 const {
     userJoin,
     getCurrentUser,
@@ -52,11 +55,14 @@ login(app, connection);
 
 const chatBot = 'ChatBot'
 
+let user = null;
+
 io.on("connection", (socket) => {
     socket.on("joinRoom", ({
-        username,
-        room
+        username = user.alias,
+        room = "test"
     }) => {
+        
         const user = userJoin(socket.id, username, room);
 
         socket.join(user.room);
@@ -106,8 +112,10 @@ app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 })
 
+
 app.get("/chat", (req, res) => {
-    if(req.session.isAuth){
+    if(req.session.isAuth){   
+        user = req.session.user;
         res.sendFile(__dirname + "/public/chat.html");
     } else {
         res.sendFile(__dirname + "/public/index.html");
@@ -118,7 +126,6 @@ app.get("/chat", (req, res) => {
 app.get("/signUp", (req, res) => {    
     res.sendFile(__dirname + "/public/signUp.html");
 })
-
 
 
 server.listen(8080, (error) => {

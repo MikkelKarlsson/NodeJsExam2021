@@ -1,3 +1,5 @@
+const session = require("express-session");
+
 const users = [];
 
 // Join user to chat
@@ -43,10 +45,12 @@ const login = (app, connection) => {
         console.log(data.username + " AND " + data.password);
         connection.query("SELECT * FROM userLogin where username = ? and password = ?", [data.username, data.password], (fields, rows) => {
             if(rows.length > 0){
-                req.session.isAuth = true
-                res.redirect("/chat")
+                let user = rows[0];
+                req.session.isAuth = true;
+                req.session.user = user;
+                res.redirect("/chat");
             } else {
-                res.redirect("/")
+                res.redirect("/");
             }
         });
     }); 
@@ -58,5 +62,5 @@ module.exports = {
     getCurrentUser,
     userLeave,
     getRoomUsers,
-    login
+    login,
 }

@@ -4,16 +4,20 @@ const userList = document.getElementById("users");
 
 
 //Get username and room from URL
-const { username, room} = Qs.parse(location.search, {
-    ignoreQueryPrefix: true
-});
+// const { username, room} = Qs.parse(location.search, {
+//     ignoreQueryPrefix: true
+// });
 
-console.log(username, room);
+// const username = "Mads";
+// const room = "Classroom 1";
 
 const socket = io();
 
 // Join chatroom
-socket.emit("joinRoom", { username, room});
+socket.emit("joinRoom", { 
+    // username, 
+    // room
+});
 
 // Get room and users
 socket.on("roomUsers", ({ room, users}) => {
