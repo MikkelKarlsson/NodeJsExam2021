@@ -42,10 +42,12 @@ const login = (app, connection) => {
 
     app.post("/", (req, res) => {
         const data = req.body
+        
         console.log(data.username + " AND " + data.password);
         connection.query("SELECT * FROM userLogin where username = ? and password = ?", [data.username, data.password], (fields, rows) => {
             if(rows.length > 0){
                 let user = rows[0];
+                user.room = data.room;
                 req.session.isAuth = true;
                 req.session.user = user;
                 res.redirect("/chat");

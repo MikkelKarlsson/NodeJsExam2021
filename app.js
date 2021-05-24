@@ -60,7 +60,7 @@ let user = null;
 io.on("connection", (socket) => {
     socket.on("joinRoom", ({
         username = user.alias,
-        room = "test"
+        room = user.room
     }) => {
         
         const user = userJoin(socket.id, username, room);
