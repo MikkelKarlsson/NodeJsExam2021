@@ -1,63 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-		<link
-			rel="stylesheet"
-			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
-			integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk="
-			crossorigin="anonymous"
-		/>
-		<link rel="stylesheet" href="css/style.css" />
-		<title>ChatCord App</title>
-	</head>
-	<body>
-		<div class="join-container w3-container w3-center w3-animate-top">
-			<header class="join-header">
-				<h1><i class="fas fa-chalkboard-teacher"></i>KEA Lounge</h1>
-			</header>
-			<main class="join-main">
-				<form action="/" method="POST">
-					<div class="form-control">
-						<label for="username">Username</label>
-						<input
-							type="text"
-							name="username"
-							id="username"
-							placeholder="Enter username..."
-							required
-						/>
-						<label for="password">Password</label>
-						<input
-							type="text"
-							name="password"
-							id="password"
-							placeholder="Enter password..."
-							required
-						/>					
-					</div>
-					<div class="form-control">
-						<label for="room">Room</label>
-						<select name="room" id="room">
-							<option value="Classroom 1">Classroom 1</option>
-							<option value="Classroom 2">Classroom 2</option>
-							<option value="Groupwork 1">Groupwork 1</option>
-							<option value="Groupwork 2">Groupwork 2</option>
-							<option value="Meeting 1">Meeting 1</option>
-							<option value="Meeting 2">Meeting 2</option>
-						</select>
-					</div>
-					<button type="submit" class="btn">Login</button>
-					<button class="btn"><a href="/signUp">Sign Up</a></button>
-					<a href=""></a>
-					<label for="signUp">Dont have an account? Sign up!</label>
 
-				</form>
-			</main>
-		</div>
-		<script src="js/main.js"></script>
-	</body>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+		integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+	<link rel="stylesheet" href="css/style.css" />
+	<title>ChatCord App</title>
+</head>
+
+<body>
+	<div class="join-container w3-container w3-center w3-animate-top">
+		<header class="join-header">
+			<h1><i class="fas fa-chalkboard-teacher"></i>KEA Lounge</h1>
+		</header>
+		<main class="join-main">
+			<form action="/" method="POST">
+				<div class="form-control">
+					<label for="username">Username</label>
+					<input type="text" name="username" id="username" placeholder="Enter username..." required />
+					<label for="password">Password</label>
+					<input type="text" name="password" id="password" placeholder="Enter password..." required />
+				</div>
+				<div class="form-control">
+					<label for="room">Room</label>
+					<select name="room" id="room">
+						<option value="Classroom 1">Classroom 1</option>
+						<option value="Classroom 2">Classroom 2</option>
+						<option value="Groupwork 1">Groupwork 1</option>
+						<option value="Groupwork 2">Groupwork 2</option>
+						<option value="Meeting 1">Meeting 1</option>
+						<option value="Meeting 2">Meeting 2</option>
+					</select>
+				</div>
+				<button type="submit" class="btn">Login</button>
+				<label for="signUp">Dont have an account? <a style="text-decoration: underline;" href="/signUp">SignUp</a></label>
+			</form>
+		</main>
+	</div>
+</body>
+
 </html>
