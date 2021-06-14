@@ -84,6 +84,7 @@ io.on("connection", (socket) => {
         });
     });
 
+    
     // listen for user chat messages
     socket.on("chatMessage", (msg) => {
 
@@ -91,6 +92,7 @@ io.on("connection", (socket) => {
 
         io.to(user.room).emit("message", formatMessage(user.username, msg));
     })
+
 
     socket.on("disconnect", () => {
         const user = userLeave(socket.id);
@@ -124,6 +126,7 @@ app.get("/chat", (req, res) => {
     }
     
 })
+
 
 app.get("/signUp", (req, res) => {    
     res.sendFile(__dirname + "/public/signUp.html");
