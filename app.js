@@ -20,13 +20,13 @@ const {
     login
 } = require("./public/js/users");
 
-// used to set environmental variables in order to store database connection credentials
+// Used to set environmental variables in order to store database connection credentials
 const dotenv = require("dotenv");
 dotenv.config({
     path: "./.env"
 })
 
-// defining the connection to the AWS database
+// Defining the connection to the AWS database
 const mysql = require("mysql");
 const connection = mysql.createConnection({
     host: "kealoungedb.censevy2cldg.us-east-1.rds.amazonaws.com",
@@ -37,7 +37,7 @@ const connection = mysql.createConnection({
 
 })
 
-// doing the actual connection to the AWS database
+// Doing the actual connection to the AWS database
 connection.connect((error) => {
     if (!error) {
         console.log("Database connection succesful");
@@ -45,7 +45,6 @@ connection.connect((error) => {
         console.log("Could not connect to the database: " + error);
     }
 })
-
 
 app.use(express.static('public'));
 app.use(express.json());
@@ -55,10 +54,11 @@ app.use(express.urlencoded({
 
 login(app, connection);
 
-const chatBot = 'ChatBot' // defining a name for the chat bot
+const chatBot = 'ChatBot' // Defining a name for the chat bot
 
 let user = null;
 
+// Connecting to chatroom
 io.on("connection", (socket) => {
     socket.on("joinRoom", ({
         username = user.alias,
@@ -85,7 +85,7 @@ io.on("connection", (socket) => {
     });
 
     
-    // listen for user chat messages
+    // Listen for user chat messages
     socket.on("chatMessage", (msg) => {
 
         const user = getCurrentUser(socket.id);
@@ -93,7 +93,7 @@ io.on("connection", (socket) => {
         io.to(user.room).emit("message", formatMessage(user.username, msg));
     })
 
-
+    // Disconnect
     socket.on("disconnect", () => {
         const user = userLeave(socket.id);
 
@@ -111,11 +111,10 @@ io.on("connection", (socket) => {
     })
 });
 
-
+// GET API
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
 })
-
 
 app.get("/chat", (req, res) => {
     if(req.session.isAuth){   
@@ -127,12 +126,11 @@ app.get("/chat", (req, res) => {
     
 })
 
-
 app.get("/signUp", (req, res) => {    
     res.sendFile(__dirname + "/public/signUp.html");
 })
 
-
+// Listening Port
 server.listen(8080, (error) => {
     if (error) {
         console.log(error);

@@ -30,11 +30,11 @@ socket.on("message", message => {
     console.log(message);
     outputMessage(message)
 
-    // scroll down on every new chat message
+    // Scroll down on every new chat message
     document.getElementById("c-messages").scrollTop = document.getElementById("c-messages").scrollHeight;
 })
 
-// submit user messages
+// Submit user messages
 chatForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -42,13 +42,13 @@ chatForm.addEventListener("submit", (event) => {
 
     socket.emit("chatMessage", msg);
 
-    // clear message input field and set focus after each send message
+    // Clear message input field and set focus after each send message
     document.getElementById("msg").value = "";
     document.getElementById("msg").focus();
 
 })
 
-// send message to DOM
+// Send message to DOM
 function outputMessage(message) {
     const div = document.createElement("div");
     div.classList.add("message"); 
@@ -76,7 +76,7 @@ function outputUsers(users) {
 }
 
 
-// prompt leave room btn
+// Prompt leave room btn
 document.getElementById('leave-btn').addEventListener('click', () => {
     const leaveRoom = confirm('Are you sure you want to leave the chatroom?');
     if (leaveRoom) {

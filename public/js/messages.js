@@ -1,8 +1,6 @@
 // https://momentjs.com/
 const moment = require("moment")
 
-
-
 //document.getElementById("timeStamp").innerText = time;
 
 function formatMessage(username, text) {
@@ -13,4 +11,5 @@ function formatMessage(username, text) {
     }
 }
 
+// Exporting formatMessage
 module.exports = formatMessage;
