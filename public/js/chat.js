@@ -7,13 +7,14 @@ const userList = document.getElementById("users");
 const socket = io();
 
 // Join chatroom
-socket.emit("joinRoom", { 
-    // username, 
-    // room
+socket.emit("joinRoom", {
 });
 
 // Get room and users
-socket.on("roomUsers", ({ room, users}) => {
+socket.on("roomUsers", ({
+    room,
+    users
+}) => {
     outputRoomName(room);
     outputUsers(users);
 });
@@ -44,8 +45,8 @@ chatForm.addEventListener("submit", (event) => {
 // Send message to DOM
 function outputMessage(message) {
     const div = document.createElement("div");
-    div.classList.add("message"); 
-    div.innerHTML = 
+    div.classList.add("message");
+    div.innerHTML =
         `<div id="username time">
             ${message.username} today at: ${message.time}
             <div id="text">
@@ -76,7 +77,3 @@ document.getElementById('leave-btn').addEventListener('click', () => {
         window.location = '../index.html';
     } else {}
 });
-
-
-
-

@@ -1,17 +1,15 @@
+// Declaring dependencies
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const session = require("express-session")
-
-app.use(session({
-    secret: "secret session cookie is signed with this secret to prevent tampering", // Data tampering is the act of deliberately modifying (destroying, manipulating, or editing) data through unauthorized channels
-    resave: false,
-    saveUninitialized: false
-}))
-
 const formatMessage = require("./public/js/messages");
 
+// Defining a name for the chat bot
+const chatBot = 'ChatBot' 
+
+// Importing from users class 
 const {
     userJoin,
     getCurrentUser,
@@ -19,6 +17,13 @@ const {
     getRoomUsers,
     login
 } = require("./public/js/users");
+
+// Uses session to hold data
+app.use(session({
+    secret: "secret session cookie is signed with this secret to prevent tampering", // Data tampering is the act of deliberately modifying (destroying, manipulating, or editing) data through unauthorized channels
+    resave: false,
+    saveUninitialized: false
+}))
 
 // Used to set environmental variables in order to store database connection credentials
 const dotenv = require("dotenv");
@@ -34,7 +39,6 @@ const connection = mysql.createConnection({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: "KeaLoungeDB"
-
 })
 
 // Doing the actual connection to the AWS database
@@ -46,25 +50,36 @@ connection.connect((error) => {
     }
 })
 
+/* 
+MIDDLEWARE: 
+Express middleware are functions that execute during the lifecycle of a request to the Express server. 
+Each middleware has access to the HTTP request and response for each route (or path) it's attached to. 
+In fact, Express itself is compromised wholly of middleware functions.
+*/
+
+//serve images, CSS files, and JavaScript files in a directory named public
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({
     extended: true
 }));
 
+// Calling login function
 login(app, connection);
 
-const chatBot = 'ChatBot' // Defining a name for the chat bot
 
+// Setting user to null
 let user = null;
 
 // Connecting to chatroom
 io.on("connection", (socket) => {
+
+    
     socket.on("joinRoom", ({
         username = user.alias,
         room = user.room
     }) => {
-        
+
         const user = userJoin(socket.id, username, room);
 
         socket.join(user.room);
@@ -84,7 +99,7 @@ io.on("connection", (socket) => {
         });
     });
 
-    
+
     // Listen for user chat messages
     socket.on("chatMessage", (msg) => {
 
@@ -117,16 +132,16 @@ app.get("/", (req, res) => {
 })
 
 app.get("/chat", (req, res) => {
-    if(req.session.isAuth){   
+    if (req.session.isAuth) {
         user = req.session.user;
         res.sendFile(__dirname + "/public/chat.html");
     } else {
         res.sendFile(__dirname + "/public/index.html");
     }
-    
+
 })
 
-app.get("/signUp", (req, res) => {    
+app.get("/signUp", (req, res) => {
     res.sendFile(__dirname + "/public/signUp.html");
 })
 
