@@ -31,6 +31,7 @@ function getRoomUsers(room) {
     return users.filter(user => user.room === room);
 }
 
+// Inserting into database
 const login = (app, connection) => {
     app.post("/signUp", (req, res) => {
         const data = req.body
@@ -40,9 +41,11 @@ const login = (app, connection) => {
         res.redirect("/")
     }); 
 
+    // Getting thrown back to starter page
     app.post("/", (req, res) => {
         const data = req.body
         
+        // Confirming that its the right username and password. If it is, its redirect to the chatpage, if not, it redirects to starter page.
         console.log(data.username + " AND " + data.password);
         connection.query("SELECT * FROM userLogin where username = ? and password = ?", [data.username, data.password], (fields, rows) => {
             if(rows.length > 0){
@@ -59,6 +62,7 @@ const login = (app, connection) => {
 
 }
 
+// Exports modules
 module.exports = {
     userJoin,
     getCurrentUser,

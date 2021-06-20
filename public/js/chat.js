@@ -1,17 +1,9 @@
+// Declaring varibles that connects with the html front-end
 const chatForm = document.getElementById("chat-form");
 const roomName = document.getElementById("room-name");
 const userList = document.getElementById("users");
 
-
-
-//Get username and room from URL
-// const { username, room} = Qs.parse(location.search, {
-//     ignoreQueryPrefix: true
-// });
-
-// const username = "Mads";
-
-
+// declaring the io function to a variable
 const socket = io();
 
 // Join chatroom
@@ -26,6 +18,7 @@ socket.on("roomUsers", ({ room, users}) => {
     outputUsers(users);
 });
 
+// Write usermessage
 socket.on("message", message => {
     console.log(message);
     outputMessage(message)

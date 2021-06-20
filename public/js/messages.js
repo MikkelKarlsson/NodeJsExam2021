@@ -1,8 +1,7 @@
 // https://momentjs.com/
 const moment = require("moment")
 
-//document.getElementById("timeStamp").innerText = time;
-
+// Function that returns the message when logging in
 function formatMessage(username, text) {
     return {
         username,
