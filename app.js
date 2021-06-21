@@ -1,5 +1,9 @@
-// Declaring dependencies
+// Server Side
+
+// Declaring dependencies, importing and intiating
+// Importing
 const express = require("express");
+// Initating
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
@@ -9,7 +13,7 @@ const formatMessage = require("./public/js/messages");
 // Defining a name for the chat bot
 const chatBot = 'ChatBot' 
 
-// Importing from users class 
+// Importing functions from users.js 
 const {
     userJoin,
     getCurrentUser,
@@ -17,6 +21,7 @@ const {
     getRoomUsers,
     login
 } = require("./public/js/users");
+
 
 // Uses session to hold data
 app.use(session({
@@ -74,14 +79,17 @@ let user = null;
 // Connecting to chatroom
 io.on("connection", (socket) => {
 
-    
+    // Server-side join room, waiting for an emit on the client side
     socket.on("joinRoom", ({
+        // Takes username + room
         username = user.alias,
         room = user.room
     }) => {
 
+        // Adding user to array
         const user = userJoin(socket.id, username, room);
 
+        // Joins user to room (socket.io function)
         socket.join(user.room);
 
         // Welcome to a single client
@@ -103,13 +111,17 @@ io.on("connection", (socket) => {
     // Listen for user chat messages
     socket.on("chatMessage", (msg) => {
 
+        // Uses getCurrentUser from client side
         const user = getCurrentUser(socket.id);
 
+        // Emits message
         io.to(user.room).emit("message", formatMessage(user.username, msg));
     })
 
     // Disconnect
     socket.on("disconnect", () => {
+
+        // Uses "userLeave" function. 
         const user = userLeave(socket.id);
 
         if (user) {
@@ -117,7 +129,7 @@ io.on("connection", (socket) => {
                 "message",
                 formatMessage(chatBot, `${user.username}` + " has left the chat"));
 
-            // Send users and room info
+            // Send users and room info (updating users in room)
             io.to(user.room).emit("roomUsers", {
                 room: user.room,
                 users: getRoomUsers(user.room)
@@ -126,6 +138,8 @@ io.on("connection", (socket) => {
     })
 });
 
+
+
 // GET API
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
@@ -133,17 +147,18 @@ app.get("/", (req, res) => {
 
 app.get("/chat", (req, res) => {
     if (req.session.isAuth) {
+        // Session user get set
         user = req.session.user;
         res.sendFile(__dirname + "/public/chat.html");
     } else {
         res.sendFile(__dirname + "/public/index.html");
     }
-
 })
 
 app.get("/signUp", (req, res) => {
     res.sendFile(__dirname + "/public/signUp.html");
 })
+
 
 // Listening Port
 server.listen(8080, (error) => {

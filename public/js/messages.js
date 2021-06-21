@@ -1,7 +1,9 @@
+// Server Side
+
 // https://momentjs.com/
 const moment = require("moment")
 
-// Function that returns the message when logging in
+// format message that gets the username, text and time with the right format
 function formatMessage(username, text) {
     return {
         username,

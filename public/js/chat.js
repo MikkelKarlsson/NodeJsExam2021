@@ -1,3 +1,5 @@
+//CLIENT SIDE
+
 // Declaring varibles that connects with the html front-end
 const chatForm = document.getElementById("chat-form");
 const roomName = document.getElementById("room-name");
@@ -6,7 +8,8 @@ const userList = document.getElementById("users");
 // declaring the io function to a variable
 const socket = io();
 
-// Join chatroom
+// Emitting "joinRoom" when the user gets navigated to /chat. 
+// Happens only when the user logs in 
 socket.emit("joinRoom", {
 });
 
@@ -19,7 +22,7 @@ socket.on("roomUsers", ({
     outputUsers(users);
 });
 
-// Write usermessage
+// Append messages on the client side
 socket.on("message", message => {
     console.log(message);
     outputMessage(message)
@@ -32,8 +35,10 @@ socket.on("message", message => {
 chatForm.addEventListener("submit", (event) => {
     event.preventDefault();
 
+    // Defining msg
     const msg = document.getElementById("msg").value;
 
+    // Emits chatMessage
     socket.emit("chatMessage", msg);
 
     // Clear message input field and set focus after each send message
@@ -42,10 +47,13 @@ chatForm.addEventListener("submit", (event) => {
 
 })
 
-// Send message to DOM
+// Send message to DOM (Creates the message box)
 function outputMessage(message) {
+    //Creates div
     const div = document.createElement("div");
+    // adds div to classList
     div.classList.add("message");
+    //Formatting message
     div.innerHTML =
         `<div id="username time">
             ${message.username} today at: ${message.time}
@@ -57,13 +65,15 @@ function outputMessage(message) {
 }
 
 
-// Add room name to DOM
+//Gets the rooms name
 function outputRoomName(room) {
+    
     roomName.innerText = room;
 }
 
-// Add users to DOM
+// Gets the userList
 function outputUsers(users) {
+    // Mapping to go through each user in the list
     userList.innerHTML = `
     ${users.map(user => `<li>${user.username}</li>`).join("")}
     `;
@@ -77,3 +87,13 @@ document.getElementById('leave-btn').addEventListener('click', () => {
         window.location = '../index.html';
     } else {}
 });
+
+// Client side fetching
+fetch("/users")
+    .then(user => user.json())
+    .then(data =>
+         data.forEach(user => {
+             document.getElementById("all-users").innerHTML += "<h1>" + user.alias + "</h1>"
+             console.log(user.username);
+    })
+)
